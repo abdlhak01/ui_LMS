@@ -1,7 +1,8 @@
 import {Component, OnInit} from '@angular/core';
 import {BookComponentModel} from './book.component.model';
 import {BookService} from "./book.service";
-import {Observable} from "rxjs/Rx"
+import {FormBuilder,FormGroup,} from "@angular/forms";
+
 
 @Component({
   selector: 'app-book',

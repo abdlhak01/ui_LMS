@@ -8,6 +8,6 @@ export class BookComponentModel {
   rackNo: number;
   status: string;
   edition: string;
-  dateOfPurchase: string;
+  dateOfPurchase: Date;
 
 }
