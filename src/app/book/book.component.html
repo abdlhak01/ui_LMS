@@ -10,28 +10,37 @@
             <div class="xs-mt-10 xs-mb-10  ">
               <div class="row">
                 <div class="col-md-8">
+                  <mat-card [ngClass]="{'bg-primary':true}" style="color: white;font-weight: bold">{{titleAction}}</mat-card>
                   <form class="form-horizontal">
                     <div class="row">
                       <div class="col-sm-9">
                         <div class="row">
-                          {{bookComponentModel|json}}
                           <div class="col-sm-12">
                             <!--<input [ngModelOptions]="{standalone: true}"[(ngModel)]="bookComponentModel.codeBook"
                                    id="form-control-2" class="form-control" type="email" value="Read only input text"
                                    [readOnly]="false">-->
                             <mat-form-field class="full-width">
                               <mat-label>Code Livre</mat-label>
-                              <input matInput placeholder="Code Livre"
+                              <input matInput placeholder="Code Livre" [readonly]="action==null" required
                                      [ngModelOptions]="{standalone: true}" [(ngModel)]="bookComponentModel.codeBook"
                                      id="form-control-2" class="form-control">
                             </mat-form-field>
                           </div>
+                          <!--<div class="col-sm-2 searchButtons">
+                            <button  (click)="findBookByCode()" [disabled]="action==null || action=='update'" class="btn btn-space btn-warning">Rechercher</button>
+                          </div>
+                          <div class="col-sm-2 searchButtons" style="margin-left:5px;">
+                            <button (click)="keepThisItem()" [disabled]="action==null || action=='update'" class="btn btn-space btn-dark">Conserver</button>
+                          </div>
+                          <div class="col-sm-2 searchButtons" style="margin-left:5px;">
+                            <button (click)="BackToNormaleMode()" [disabled]="action==null || action=='update'" class="btn btn-space btn-danger">Annuler</button>
+                          </div>-->
                         </div>
                         <div class="row">
                           <div class="col-sm-12">
                             <mat-form-field class="full-width">
                               <mat-label>Auteur</mat-label>
-                              <input matInput placeholder="Auteur"
+                              <input matInput [readonly]="action==null" placeholder="Auteur" required
                                      [ngModelOptions]="{standalone: true}" [(ngModel)]="bookComponentModel.author"
                                      id="form-control-1" class="form-control">
                             </mat-form-field>
@@ -42,7 +51,7 @@
                           <div class="col-sm-12">
                             <mat-form-field class="full-width">
                               <mat-label>Titre</mat-label>
-                              <input matInput placeholder="Titre"
+                              <input matInput [readonly]="action==null" placeholder="Titre" required
                                      [ngModelOptions]="{standalone: true}" [(ngModel)]="bookComponentModel.title"
                                      id="form-control-5" class="form-control">
                             </mat-form-field>
@@ -54,7 +63,7 @@
                           <div class="col-sm-12">
                             <mat-form-field class="full-width">
                               <mat-label>Prix</mat-label>
-                              <input matInput placeholder="Titre"
+                              <input matInput [readonly]="action==null" placeholder="Prix" required type="number"
                                      [ngModelOptions]="{standalone: true}" [(ngModel)]="bookComponentModel.price"
                                      id="form-control-7" class="form-control">
                             </mat-form-field>
@@ -64,7 +73,7 @@
                           <div class="col-sm-12">
                             <mat-form-field class="full-width">
                               <mat-label>Grille</mat-label>
-                              <input matInput placeholder="Titre"
+                              <input matInput type="number" [readonly]="action==null" placeholder="Grille" required
                                      [ngModelOptions]="{standalone: true}" [(ngModel)]="bookComponentModel.rackNo"
                                      id="form-control-4" class="form-control">
                             </mat-form-field>
@@ -74,12 +83,13 @@
                           <div class="col-sm-12">
                             <mat-form-field class="full-width">
                               <mat-label>Statuts</mat-label>
-                              <select matNativeControl required [ngModelOptions]="{standalone: true}"
+                              <mat-select matNativeControl required [ngModelOptions]="{standalone: true}"
+                                      [disabled]="action==null"
                                       [(ngModel)]="bookComponentModel.status">
-                                <option value="journau">Journaux</option>
-                                <option value="livre">Livre d'étude</option>
-                                <option value="magazine">Magazines</option>
-                              </select>
+                                <mat-option value="journau">Journaux</mat-option>
+                                <mat-option value="livre">Livre d'étude</mat-option>
+                                <mat-option value="magazine">Magazines</mat-option>
+                              </mat-select>
                             </mat-form-field>
                           </div>
                         </div>
@@ -87,7 +97,7 @@
                           <div class="col-sm-12">
                             <mat-form-field class="full-width">
                               <mat-label>Edition</mat-label>
-                              <input matInput placeholder="Titre"
+                              <input matInput [readonly]="action==null" placeholder="Edition" type="number" required
                                      [ngModelOptions]="{standalone: true}" [(ngModel)]="bookComponentModel.edition"
                                      id="form-control-10" class="form-control">
                             </mat-form-field>
@@ -97,7 +107,8 @@
                           <div class="col-sm-12">
                             <mat-form-field class="full-width">
                               <mat-label>Choisissez une date</mat-label>
-                              <input class="col-sm-9" matInput [matDatepicker]="picker"
+                              <input class="col-sm-9" matInput [disabled]="action==null" [matDatepicker]="picker"
+                                     required readonly style="color: black"
                                      [(ngModel)]="bookComponentModel.dateOfPurchase"
                                      id="form-control-11" [ngModelOptions]="{standalone: true}">
                               <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
@@ -111,18 +122,30 @@
                       </div>
                     </div>
                     <div class="form-group col-sm-12">
-                      <div class="row center-block">
-                        <div class="col-md-3">
-                          <button (click)="addbook()" class="btn btn-space btn-primary">Ajouter</button>
+                      <div class="row center-block" *ngIf="action==null">
+                        <div class="col-md-2">
+                          <button (click)="startAction('add')" class="btn btn-space btn-primary">Ajouter</button>
                         </div>
-                        <div class="col-md-3">
-                          <button class="btn btn-space btn-success">Modifier</button>
+                        <div class="col-md-2">
+                          <button (click)="startAction('update')" class="btn btn-space btn-success">Modifier</button>
                         </div>
-                        <div class="col-md-3">
-                          <button class="btn btn-space btn-warning">Rechercher</button>
+                        <div class="col-md-2">
+                          <button (click)="startAction('search')" class="btn btn-space btn-warning">Rechercher</button>
                         </div>
-                        <div class="col-md-3">
-                          <button class="btn btn-space btn-danger">Supprimer</button>
+                        <div class="col-md-2">
+                          <button (click)="callAction('delete')" class="btn btn-space btn-danger">Supprimer</button>
+                        </div>
+                      </div>
+                      <div class="row center-block" *ngIf="action!=null">
+                        <div class="col-md-2">
+                          <button [disabled]="action==null" (click)="callAction('add')"
+                                  class="btn btn-space btn-primary">Valider
+                          </button>
+                        </div>
+                        <div class="col-md-2">
+                          <button [disabled]="action==null" (click)="startAction(null)"
+                                  class="btn btn-space btn-success">Annuler
+                          </button>
                         </div>
                       </div>
                     </div>
@@ -136,3 +159,4 @@
     </div>
   </div>
 </div>
+{{bookComponentModel|json}}

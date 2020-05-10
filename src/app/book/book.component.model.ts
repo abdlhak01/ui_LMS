@@ -1,7 +1,7 @@
 export class BookComponentModel {
 
   bookId: number;
-  codeBook: number;
+  codeBook: string;
   author: string;
   title: string;
   price: number;

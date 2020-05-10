@@ -9,13 +9,21 @@ import {PageNotFoundComponent} from './page-not-found/page-not-found.component';
 import {HeaderComponent} from './shared/header/header.component';
 import {NavigationComponent} from './shared/navigation/navigation.component';
 import {BookComponent} from './book/book.component';
-import {FormsModule} from '@angular/forms';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {HttpClientModule} from "@angular/common/http";
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {MatDatepickerModule} from "@angular/material/datepicker";
-import {MatNativeDateModule} from "@angular/material/core";
+import {DateAdapter, MAT_DATE_FORMATS, MatNativeDateModule} from "@angular/material/core";
 import {MatFormFieldModule} from "@angular/material/form-field";
 import {MatInputModule} from "@angular/material/input";
+import {APP_DATE_FORMATS, AppDateAdapter} from "../../helpers/format-datepicker";
+import {MatCardModule} from "@angular/material/card";
+import { SnackBarComponent } from './snack-bar-component/snack-bar-component';
+import {MatSnackBarModule} from "@angular/material/snack-bar";
+import {MatDialogModule} from "@angular/material/dialog";
+import {MatButtonModule} from "@angular/material/button";
+import {ConfirmationDialogComponent} from "./confirmation-dilog/confirmation-dialog.component";
+import {MatSelectModule} from "@angular/material/select";
 
 @NgModule({
   declarations: [
@@ -26,6 +34,8 @@ import {MatInputModule} from "@angular/material/input";
     LeftNavTemplateComponent,
     NavigationComponent,
     BookComponent,
+    SnackBarComponent,
+    ConfirmationDialogComponent,
   ],
   imports: [
     BrowserModule,
@@ -37,10 +47,21 @@ import {MatInputModule} from "@angular/material/input";
     MatDatepickerModule,
     MatNativeDateModule,
     MatFormFieldModule,
-    MatInputModule
-
+    MatInputModule,
+    MatCardModule,
+    MatSnackBarModule,
+    ReactiveFormsModule,
+    MatDialogModule,
+    MatButtonModule,
+    MatSelectModule
+  ],
+  entryComponents: [
+    SnackBarComponent,
+    ConfirmationDialogComponent
   ],
   providers: [
+    {provide: DateAdapter, useClass: AppDateAdapter},
+    {provide: MAT_DATE_FORMATS, useValue: APP_DATE_FORMATS}
   ],
   bootstrap: [AppComponent]
 })
