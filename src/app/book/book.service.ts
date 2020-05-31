@@ -14,8 +14,6 @@ export class BookService {
       `http://localhost:8080/api/book/first`);
   }
   deleteBook(book : BookComponentModel):any {
-    let header = new HttpHeaders();
-    header= header.append('content-type', 'application/json');
     return this.http.delete<BookComponentModel>(
       `http://localhost:8080/api/book/${book.bookId}`);
   }

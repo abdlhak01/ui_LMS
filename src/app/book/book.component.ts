@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {AfterViewInit, Component, OnInit} from '@angular/core';
 import {BookComponentModel} from './book.component.model';
 import {BookService} from "./book.service";
 import {SnackBarComponent} from "../snack-bar-component/snack-bar-component";
@@ -12,6 +12,7 @@ import {ConfirmationDialogComponent} from "../confirmation-dilog/confirmation-di
   styleUrls: ['./book.component.scss']
 })
 export class BookComponent implements OnInit {
+
   private bookOldeModel: BookComponentModel = new BookComponentModel();
   durationInSeconds = 5;
 
@@ -52,16 +53,32 @@ export class BookComponent implements OnInit {
   startAction(action: string) {
     switch (action) {
       case 'add': {
-        this.bookOldeModel = this.bookComponentModel;
+        this.bookOldeModel = {...this.bookComponentModel};
         this.bookComponentModel = new BookComponentModel();
         this.action = 'add';
         this.titleAction = 'Creation';
         break;
       }
       case 'update': {
-        this.bookOldeModel = this.bookComponentModel;
+        this.bookOldeModel = {...this.bookComponentModel};
         this.action = 'update';
         this.titleAction = 'Modification';
+        break;
+      }
+      case 'delete': {
+        const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
+          width: '850px',
+          data: "Est-ce que vous confirmez la suppression de ce livre?"
+        });
+        dialogRef.afterClosed().subscribe(result => {
+          if(result) {
+            this.bookservice.deleteBook(this.bookComponentModel).subscribe( result =>{
+                this.openSnackBar(this.initData('Le livre est supprimé avec succès', 'success'));
+                this.getFirstBook();
+              }
+            )
+          }
+        });
         break;
       }
       case null: {
@@ -80,8 +97,8 @@ export class BookComponent implements OnInit {
     };
   }
 
-  callAction(action: string) {
-    switch (action) {
+  callAction() {
+    switch (this.action) {
       case 'add': {
         this.bookservice.addBook(this.bookComponentModel).subscribe(resp => {
           this.bookComponentModel = resp;
@@ -106,24 +123,8 @@ export class BookComponent implements OnInit {
         });
         break;
       }
-      case 'delete': {
-        const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
-          width: '850px',
-          data: "Est-ce que vous confirmez la suppression de ce livre?"
-        });
-        dialogRef.afterClosed().subscribe(result => {
-          if(result) {
-            alert('yes')
-            this.bookservice.deleteBook(this.bookComponentModel).subscribe( result =>{
-                this.openSnackBar(this.initData('Le livre est supprimé avec succès', 'success'));
-                this.getFirstBook();
-              }
-            )
-          }
-        });
-        break;
-      }
-      case 'update': {
+
+      case '': {
         break;
       }
 
