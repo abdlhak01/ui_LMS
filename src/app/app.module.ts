@@ -18,13 +18,14 @@ import {MatFormFieldModule} from "@angular/material/form-field";
 import {MatInputModule} from "@angular/material/input";
 import {APP_DATE_FORMATS, AppDateAdapter} from "../../helpers/format-datepicker";
 import {MatCardModule} from "@angular/material/card";
-import { SnackBarComponent } from './snack-bar-component/snack-bar-component';
+import {SnackBarComponent} from './snack-bar-component/snack-bar-component';
 import {MatSnackBarModule} from "@angular/material/snack-bar";
 import {MatDialogModule} from "@angular/material/dialog";
 import {MatButtonModule} from "@angular/material/button";
 import {ConfirmationDialogComponent} from "./confirmation-dilog/confirmation-dialog.component";
 import {MatSelectModule} from "@angular/material/select";
-import { TransactionComponent } from './transaction/transaction.component';
+import {MemberRecordComponent} from './membre/member-record.component';
+import {TransactionComponent} from './transaction/transaction.component';
 
 @NgModule({
   declarations: [
@@ -38,6 +39,7 @@ import { TransactionComponent } from './transaction/transaction.component';
     SnackBarComponent,
     ConfirmationDialogComponent,
     TransactionComponent,
+    MemberRecordComponent,
   ],
   imports: [
     BrowserModule,
