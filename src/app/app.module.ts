@@ -24,6 +24,7 @@ import {MatDialogModule} from "@angular/material/dialog";
 import {MatButtonModule} from "@angular/material/button";
 import {ConfirmationDialogComponent} from "./confirmation-dilog/confirmation-dialog.component";
 import {MatSelectModule} from "@angular/material/select";
+import { TransactionComponent } from './transaction/transaction.component';
 
 @NgModule({
   declarations: [
@@ -36,6 +37,7 @@ import {MatSelectModule} from "@angular/material/select";
     BookComponent,
     SnackBarComponent,
     ConfirmationDialogComponent,
+    TransactionComponent,
   ],
   imports: [
     BrowserModule,
