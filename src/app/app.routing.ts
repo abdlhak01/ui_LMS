@@ -3,6 +3,7 @@ import {RouterModule, Routes} from '@angular/router';
 import {LeftNavTemplateComponent} from './template/left-nav-template.component';
 import {PageNotFoundComponent} from './page-not-found/page-not-found.component';
 import {BookComponent} from './book/book.component';
+import {TransactionComponent} from './transaction/transaction.component';
 
 export const routes: Routes = [{
   path: '',
@@ -41,6 +42,13 @@ export const routes: Routes = [{
       component: BookComponent,
       data: {
         title: 'Books Page'
+      },
+    },
+    {
+      path: 'transactions',
+      component: TransactionComponent,
+      data: {
+        title: 'Transactions Page'
       },
     }
   ]

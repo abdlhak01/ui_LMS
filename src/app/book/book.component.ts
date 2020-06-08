@@ -43,12 +43,11 @@ export class BookComponent implements OnInit {
       }
     )
   }
-  /*
   getAllbook() {
     this.bookservice.getAllbook().subscribe(resp => {
       this.bookList = resp;
     });
-  }*/
+  }
 
   startAction(action: string) {
     switch (action) {

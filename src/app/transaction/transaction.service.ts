@@ -38,12 +38,12 @@ export class TransactionService {
   }
 
   getNewCode(){
-    return this.http.get<BookComponentModel>(
+    return this.http.get<TransactionModule>(
       `http://localhost:8080/api/transaction`);
   }
 
   findTransactionByCode(codeTrans :String){
-   return this.http.get<BookComponentModel>(
+   return this.http.get<TransactionModule>(
   `http://localhost:8080/api/transaction/${codeTrans}`);
   }
 }

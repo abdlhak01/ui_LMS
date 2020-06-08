@@ -3,110 +3,89 @@
     <div class="row row-stat">
       <div class="col-sm-12">
         <div class="panel panel-default">
-          <div class="panel-heading panel-heading-divider">Livres<span
-            class="panel-subtitle">Maintenance des livres</span>
+          <div class="panel-heading panel-heading-divider">Transaction<span
+            class="panel-subtitle">Maintenance des transaction</span>
           </div>
           <div class="panel-body">
             <div class="xs-mt-10 xs-mb-10  ">
               <div class="row">
                 <div class="col-md-8">
-                  <mat-card [ngClass]="{'bg-primary':true}" style="color: white;font-weight: bold">{{titleAction}}</mat-card>
+                  <mat-card [ngClass]="{'bg-primary':true}"
+                            style="color: white;font-weight: bold">{{titleAction}}</mat-card>
                   <form class="form-horizontal">
                     <div class="row">
                       <div class="col-sm-9">
                         <div class="row">
                           <div class="col-sm-12">
                             <mat-form-field class="full-width">
-                              <mat-label>Code Livre</mat-label>
-                              <input matInput placeholder="Code Livre" [readonly]="action!='add' && action!='update' " required
-                                     [ngModelOptions]="{standalone: true}" [(ngModel)]="bookComponentModel.codeBook"
+                              <mat-label>Code</mat-label>
+                              <input matInput placeholder="Code transaction"
+                                     [readonly]="action!='add' && action!='update' " required
+                                     [ngModelOptions]="{standalone: true}" [(ngModel)]="transactionModule.codeTrans"
                                      id="form-control-2" class="form-control">
                             </mat-form-field>
                           </div>
                         </div>
+
                         <div class="row">
                           <div class="col-sm-12">
                             <mat-form-field class="full-width">
-                              <mat-label>Auteur</mat-label>
-                              <input matInput [readonly]="action!='add' && action!='update' " placeholder="Auteur" required
-                                     [ngModelOptions]="{standalone: true}" [(ngModel)]="bookComponentModel.author"
+                              <mat-label>Member</mat-label>
+                              <input matInput [readonly]="action!='add' && action!='update' "
+                                     placeholder="code de membres" required
+                                     [ngModelOptions]="{standalone: true}" [(ngModel)]="transactionModule.memberId"
                                      id="form-control-1" class="form-control">
                             </mat-form-field>
                           </div>
                         </div>
 
+
                         <div class="row">
                           <div class="col-sm-12">
                             <mat-form-field class="full-width">
-                              <mat-label>Titre</mat-label>
-                              <input matInput [readonly]="action!='add' && action!='update' " placeholder="Titre" required
-                                     [ngModelOptions]="{standalone: true}" [(ngModel)]="bookComponentModel.title"
+                              <mat-label>Livre</mat-label>
+                              <select matInput placeholder="code de livers" required
+                                     [ngModelOptions]="{standalone: true}" [(ngModel)]="transactionModule.bookId"
                                      id="form-control-5" class="form-control">
+                                <option *ngFor="let codeBook of bookList" [value]="codeBook" >
+                                  {{codeBook}}
+                                </option>
+                              </select>
                             </mat-form-field>
                           </div>
                         </div>
 
                         <div class="row">
-
                           <div class="col-sm-12">
                             <mat-form-field class="full-width">
-                              <mat-label>Prix</mat-label>
-                              <input matInput [readonly]="action!='add' && action!='update' " placeholder="Prix" required type="number"
-                                     [ngModelOptions]="{standalone: true}" [(ngModel)]="bookComponentModel.price"
-                                     id="form-control-7" class="form-control">
-                            </mat-form-field>
-                          </div>
-                        </div>
-                        <div class="row">
-                          <div class="col-sm-12">
-                            <mat-form-field class="full-width">
-                              <mat-label>Grille</mat-label>
-                              <input matInput type="number" [readonly]="action!='add' && action!='update' " placeholder="Grille" required
-                                     [ngModelOptions]="{standalone: true}" [(ngModel)]="bookComponentModel.rackNo"
-                                     id="form-control-4" class="form-control">
-                            </mat-form-field>
-                          </div>
-                        </div>
-                        <div class="row">
-                          <div class="col-sm-12">
-                            <mat-form-field class="full-width">
-                              <mat-label>Statuts</mat-label>
-                              <mat-select matNativeControl required [ngModelOptions]="{standalone: true}"
-                                          [disabled]="action==null"
-                                          [(ngModel)]="bookComponentModel.status">
-                                <mat-option value="journau">Journaux</mat-option>
-                                <mat-option value="livre">Livres d'étude</mat-option>
-                                <mat-option value="magazine">Magazines</mat-option>
-                              </mat-select>
-                            </mat-form-field>
-                          </div>
-                        </div>
-                        <div class="row">
-                          <div class="col-sm-12">
-                            <mat-form-field class="full-width">
-                              <mat-label>Edition</mat-label>
-                              <input matInput [readonly]="action!='add' && action!='update' " placeholder="Edition" type="number" required
-                                     [ngModelOptions]="{standalone: true}" [(ngModel)]="bookComponentModel.edition"
-                                     id="form-control-10" class="form-control">
-                            </mat-form-field>
-                          </div>
-                        </div>
-                        <div class="row">
-                          <div class="col-sm-12">
-                            <mat-form-field class="full-width">
-                              <mat-label>Choisissez une date</mat-label>
+                              <mat-label>Choisissez une date d'emission</mat-label>
                               <input class="col-sm-9" matInput [disabled]="action==null" [matDatepicker]="picker"
                                      required readonly style="color: black"
-                                     [(ngModel)]="bookComponentModel.dateOfPurchase"
-                                     id="form-control-11" [ngModelOptions]="{standalone: true}">
+                                     [(ngModel)]="transactionModule.dateOfIssue"
+                                     id="form-control-3" [ngModelOptions]="{standalone: true}">
                               <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
                               <mat-datepicker #picker></mat-datepicker>
                             </mat-form-field>
                           </div>
                         </div>
+
+                        <div class="row">
+                          <div class="col-sm-12">
+                            <mat-form-field class="full-width">
+                              <mat-label>Choisissez une date d'echeance</mat-label>
+                              <input class="col-sm-9" matInput [disabled]="action==null" [matDatepicker]="picker"
+                                     required readonly style="color: black"
+                                     [(ngModel)]="transactionModule.dueDate"
+                                     id="form-control-4" [ngModelOptions]="{standalone: true}">
+                              <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                              <mat-datepicker #picker></mat-datepicker>
+                            </mat-form-field>
+                          </div>
+                        </div>
+
                       </div>
                       <div class="col-sm-3">
-                        <img src="src/assets/images/book.png">
+                        <img src="assets/images/book.png">
                       </div>
                     </div>
                     <div class="form-group col-sm-12">
@@ -147,4 +126,4 @@
     </div>
   </div>
 </div>
-{{bookComponentModel|json}}
+{{transactionModule|json}}

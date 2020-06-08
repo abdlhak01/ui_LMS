@@ -5,6 +5,8 @@ import {SnackBarComponent} from "../snack-bar-component/snack-bar-component";
 import {MatSnackBar} from '@angular/material';
 import {MatDialog} from '@angular/material/dialog';
 import {ConfirmationDialogComponent} from "../confirmation-dilog/confirmation-dialog.component";
+import {BookService} from "../book/book.service";
+import {element} from "protractor";
 
 @Component({
   selector: 'app-transaction',
@@ -34,13 +36,26 @@ export class TransactionComponent implements OnInit {
   titleAction: string = 'Consultation';
 
   ngOnInit() {
+    this.getFirstTrans();
+    this.getDropDownInBook();
   }
 
-  getFirstTrans(){
-    this.transService.getFirstTrans().subscribe(result =>{
+  getFirstTrans() {
+    this.transService.getFirstTrans().subscribe(result => {
         this.transactionModule = result;
       }
     )
+  }
+
+  private bookservice: BookService ;
+  private bookList: Array<String> = [];
+
+  getDropDownInBook(){
+    this.bookservice.getAllbook().subscribe(result => {
+      result.forEach(element => {
+        this.bookList.push(element["codeBook"])
+      })
+    })
   }
 
   getAllTrans() {
@@ -70,8 +85,8 @@ export class TransactionComponent implements OnInit {
           data: "Est-ce que vous confirmez la suppression de ce livre?"
         });
         dialogRef.afterClosed().subscribe(result => {
-          if(result) {
-            this.transService.deleteTrans(this.transactionModule).subscribe( result =>{
+          if (result) {
+            this.transService.deleteTrans(this.transactionModule).subscribe(result => {
                 this.openSnackBar(this.initData('La transaction est supprimé avec succès', 'success'));
                 this.getFirstTrans();
               }
@@ -94,41 +109,47 @@ export class TransactionComponent implements OnInit {
       message: error,
       messageType: messageType
     };
+  }
 
 
-    callAction()
-    {
-      switch (this.action) {
-        case 'add': {
-          this.transService.addTrans(this.transactionModule).subscribe(resp => {
-            this.transactionModule = resp;
-            this.currentItem = resp;
-            this.action = null;
-            this.titleAction = 'Consultation';
-            this.openSnackBar(this.initData('La transaction est ajouté avec succès', 'success'));
-          }, error => {
-            this.openSnackBar(this.initData(error.error.message, 'error'));
-          });
-          break;
-        }
-        case 'update': {
-          this.transService.updateTrans(this.transactionModule).subscribe(resp => {
-            this.transactionModule = resp;
-            this.currentItem = resp;
-            this.action = null;
-            this.titleAction = 'Consultation';
-            this.openSnackBar(this.initData('La transaction est modifié avec succès', 'success'));
-          }, error => {
-            this.openSnackBar(this.initData(error.error.message, 'error'));
-          });
-          break;
-        }
+  callAction() {
+    switch (this.action) {
+      case 'add': {
+        this.transService.addTrans(this.transactionModule).subscribe(resp => {
+          this.transactionModule = resp;
+          this.currentItem = resp;
+          this.action = null;
+          this.titleAction = 'Consultation';
+          this.openSnackBar(this.initData('La transaction est ajouté avec succès', 'success'));
+        }, error => {
+          this.openSnackBar(this.initData(error.error.message, 'error'));
+        });
+        break;
+      }
+      case 'update': {
+        this.transService.updateTrans(this.transactionModule).subscribe(resp => {
+          this.transactionModule = resp;
+          this.currentItem = resp;
+          this.action = null;
+          this.titleAction = 'Consultation';
+          this.openSnackBar(this.initData('La transaction est modifié avec succès', 'success'));
+        }, error => {
+          this.openSnackBar(this.initData(error.error.message, 'error'));
+        });
+        break;
+      }
 
-        case '': {
-          break;
-        }
-
+      case '': {
+        break;
       }
     }
   }
+
+  findTransByCode(){
+    this.transService.findTransactionByCode(this.transactionModule.codeTrans).subscribe(resp => {
+      this.transactionModule = resp ;
+    });
+  }
+
+
 }

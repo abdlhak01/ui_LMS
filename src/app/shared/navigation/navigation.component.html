@@ -17,28 +17,14 @@
                 <small class="text-center">Senior Developer</small>
             </a>
         </li>
-        <li><a [routerLink]="['/dashboard']" [routerLinkActive]="['active']" class="waves-effect"><i class="fa fa-home"></i> <span
-                class="hide-menu">Dashboard</span></a></li>
         <!-- <li class=""><a href="javascript:void(0);" class="waves-effect"><i class="fa fa-envelope-o"></i> <span
                 class="hide-menu"> Mailbox <span class="fa arrow"></span><span
                 class="label label-rouded label-danger pull-right">6</span></span></a>
         </li> -->
         <li>
-            <a [routerLink]="['/ui-elements']" [routerLinkActive]="['active']">
-                <i class="fa fa-edit"></i>
-                <span class="hide-menu">UI Elements</span>
-            </a>
-        </li>
-        <li>
-            <a  [routerLink]="['/forms']" [routerLinkActive]="['active']">
-                <i class="fa fa-edit"></i>
-                <span class="hide-menu">Form</span>
-            </a>
-        </li>
-        <li>
-            <a  [routerLink]="['/tables']" [routerLinkActive]="['active']">
-                <i class="fa fa-bars"></i>
-                <span class="hide-menu">Tables</span>
+            <a  [routerLink]="['/transactions']" [routerLinkActive]="['active']">
+                <i class="fa fa-exchange"></i>
+                <span class="hide-menu">Transaction</span>
             </a>
         </li>
         <li>
@@ -47,5 +33,23 @@
                 <span class="hide-menu">Livres</span>
             </a>
         </li>
+      <li>
+        <a  [routerLink]="['/facture']" [routerLinkActive]="['active']">
+          <i class="fa fa-shopping-cart "></i>
+          <span class="hide-menu">Facture</span>
+        </a>
+      </li>
+      <li>
+        <a  [routerLink]="['/membres']" [routerLinkActive]="['active']">
+          <i class="fa fa-bars"></i>
+          <span class="hide-menu">Dossiers des membres</span>
+        </a>
+      </li>
+      <li>
+        <a  [routerLink]="['/util']" [routerLinkActive]="['active']">
+          <i class="fa fa-users"></i>
+          <span class="hide-menu">Gestion des utilisateurs</span>
+        </a>
+      </li>
     </ul>
 </div>
