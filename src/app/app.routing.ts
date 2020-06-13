@@ -4,6 +4,7 @@ import {LeftNavTemplateComponent} from './template/left-nav-template.component';
 import {PageNotFoundComponent} from './page-not-found/page-not-found.component';
 import {BookComponent} from './book/book.component';
 import {TransactionComponent} from './transaction/transaction.component';
+import {MemberRecordComponent} from "./membre/member-record.component";
 
 export const routes: Routes = [{
   path: '',
@@ -42,6 +43,13 @@ export const routes: Routes = [{
       component: BookComponent,
       data: {
         title: 'Books Page'
+      },
+    },
+    {
+      path: 'member-record',
+      component: MemberRecordComponent,
+      data: {
+        title: 'Members records Page'
       },
     },
     {

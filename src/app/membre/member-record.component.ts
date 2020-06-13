@@ -7,7 +7,7 @@ import {MemberRecordComponentModel} from "./member-record.model";
 import {MemberRecordService} from "./member-record.service";
 
 @Component({
-  selector: 'app-membre',
+  selector: 'app-membre-record',
   templateUrl: './member-record.component.html',
   styleUrls: ['./member-record.component.scss']
 })

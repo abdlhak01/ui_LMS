@@ -39,6 +39,7 @@ export class BookComponent implements OnInit {
   }
   getFirstBook(){
     this.bookservice.getFirstBook().subscribe( result =>{
+      if(result)
         this.bookComponentModel = result;
       }
     )
