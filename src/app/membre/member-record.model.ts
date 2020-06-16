@@ -1,13 +1,13 @@
 export class MemberRecordComponentModel {
 
-  adress: string;
-  memberRecordCode: string;
-  dateOfMemberRecordship: Date;
-  maxBookLimit: number;
   memberRecordId: number;
-  fullName: string;
-  noBookIssued: number;
-  phoneNo: string;
+  codeMemberRecord: string;
   type: string;
+  dateOfMemberRecordship: Date;
+  noBookIssued: number;
+  maxBookLimit: number;
+  fullName: string;
+  adress: string;
+  phoneNo: string;
 
 }

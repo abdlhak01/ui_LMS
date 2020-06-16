@@ -135,7 +135,7 @@ export class MemberRecordComponent implements OnInit {
   }
 
   findMemberRecordByCode() {
-    this.memberRecordservice.findMemberRecordByCode(this.memberRecordComponentModel.memberRecordCode).subscribe(resp => {
+    this.memberRecordservice.findMemberRecordByCode(this.memberRecordComponentModel.codeMemberRecord).subscribe(resp => {
       this.memberRecordComponentModel = resp;
     });
   }

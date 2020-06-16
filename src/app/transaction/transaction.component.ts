@@ -6,7 +6,9 @@ import {MatSnackBar} from '@angular/material';
 import {MatDialog} from '@angular/material/dialog';
 import {ConfirmationDialogComponent} from "../confirmation-dilog/confirmation-dialog.component";
 import {BookService} from "../book/book.service";
-import {element} from "protractor";
+import {BookComponentModel } from 'app/book/book.component.model';
+import {MemberRecordService } from '../membre/member-record.service';
+import {MemberRecordComponentModel} from '../membre/member-record.model';
 
 @Component({
   selector: 'app-transaction',
@@ -18,8 +20,8 @@ export class TransactionComponent implements OnInit {
   private transOldModel: TransactionModule = new TransactionModule();
   durationInSeconds = 5;
 
-  constructor(private transService: TransactionService, private _snackBar: MatSnackBar,
-              public dialog: MatDialog) {
+  constructor(private transService: TransactionService,private bookservice: BookService,private memberService: MemberRecordService, private _snackBar: MatSnackBar,
+              public dialog: MatDialog ) {
   }
 
   openSnackBar(message) {
@@ -37,7 +39,9 @@ export class TransactionComponent implements OnInit {
 
   ngOnInit() {
     this.getFirstTrans();
+    // dispaly DropDown in form transaction
     this.getDropDownInBook();
+    this.getDropDownInMember();
   }
 
   getFirstTrans() {
@@ -46,14 +50,21 @@ export class TransactionComponent implements OnInit {
       }
     )
   }
-
-  private bookservice: BookService ;
-  private bookList: Array<String> = [];
+  bookList: BookComponentModel[] = [];
 
   getDropDownInBook(){
     this.bookservice.getAllbook().subscribe(result => {
       result.forEach(element => {
-        this.bookList.push(element["codeBook"])
+        this.bookList.push(element);
+      })
+    })
+  }
+  memberList: MemberRecordComponentModel[] = [];
+
+  getDropDownInMember(){
+    this.memberService.getAllmemberRecord().subscribe(result => {
+      result.forEach(element => {
+        this.memberList.push(element)
       })
     })
   }
