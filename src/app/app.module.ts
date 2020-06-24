@@ -26,6 +26,15 @@ import {ConfirmationDialogComponent} from "./confirmation-dilog/confirmation-dia
 import {MatSelectModule} from "@angular/material/select";
 import {MemberRecordComponent} from './membre/member-record.component';
 import {TransactionComponent} from './transaction/transaction.component';
+import { RxStompService  } from '@stomp/ng2-stompjs';
+import { ProgressWebsocketService } from './services/progress.websocket.service';
+import { LoginComponent } from './login/login.component';
+import { RegisterComponent } from './register/register.component';
+import { HomeComponent } from './home/home.component';
+import { ProfileComponent } from './profile/profile.component';
+import { BoardAdminComponent } from './board-admin/board-admin.component';
+import { BoardModeratorComponent } from './board-moderator/board-moderator.component';
+import { BoardUserComponent } from './board-user/board-user.component';
 
 @NgModule({
   declarations: [
@@ -40,6 +49,15 @@ import {TransactionComponent} from './transaction/transaction.component';
     ConfirmationDialogComponent,
     TransactionComponent,
     MemberRecordComponent,
+    LoginComponent,
+    RegisterComponent,
+    HomeComponent,
+    ProfileComponent,
+    BoardAdminComponent,
+    BoardModeratorComponent,
+    BoardUserComponent,
+
+
   ],
   imports: [
     BrowserModule,
@@ -65,7 +83,9 @@ import {TransactionComponent} from './transaction/transaction.component';
   ],
   providers: [
     {provide: DateAdapter, useClass: AppDateAdapter},
-    {provide: MAT_DATE_FORMATS, useValue: APP_DATE_FORMATS}
+    {provide: MAT_DATE_FORMATS, useValue: APP_DATE_FORMATS},
+    RxStompService,
+    ProgressWebsocketService
   ],
   bootstrap: [AppComponent]
 })

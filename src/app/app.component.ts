@@ -1,6 +1,7 @@
-import {Component} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {Title} from '@angular/platform-browser';
 import {Router, ActivatedRoute, NavigationEnd, Event} from '@angular/router';
+import {TokenStorageService} from "./_services/token-storage.service";
 
 
 declare var jQuery: any;

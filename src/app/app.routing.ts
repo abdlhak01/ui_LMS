@@ -5,12 +5,28 @@ import {PageNotFoundComponent} from './page-not-found/page-not-found.component';
 import {BookComponent} from './book/book.component';
 import {TransactionComponent} from './transaction/transaction.component';
 import {MemberRecordComponent} from "./membre/member-record.component";
+import {BoardAdminComponent} from "./board-admin/board-admin.component";
+import {BoardModeratorComponent} from "./board-moderator/board-moderator.component";
+import {BoardUserComponent} from "./board-user/board-user.component";
+import {ProfileComponent} from "./profile/profile.component";
+import {RegisterComponent} from "./register/register.component";
+import {LoginComponent} from "./login/login.component";
+import {HomeComponent} from "./home/home.component";
 
 export const routes: Routes = [{
   path: '',
   redirectTo: 'dashboard',
   pathMatch: 'full'
-}, {
+},
+  { path: 'home', component: HomeComponent },
+  { path: 'login', component: LoginComponent },
+  { path: 'register', component: RegisterComponent },
+  { path: 'profile', component: ProfileComponent },
+  { path: 'user', component: BoardUserComponent },
+  { path: 'mod', component: BoardModeratorComponent },
+  { path: 'admin', component: BoardAdminComponent },
+  { path: '', redirectTo: 'home', pathMatch: 'full' },
+  {
   path: '',
   component: LeftNavTemplateComponent,
   data: {
