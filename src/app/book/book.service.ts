@@ -1,6 +1,7 @@
 import {Injectable} from '@angular/core';
 import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {BookComponentModel} from "./book.component.model";
+import {Observable} from "rxjs";
 
 @Injectable({
   providedIn: 'root'
@@ -9,40 +10,40 @@ export class BookService {
 
   constructor(public http : HttpClient) { }
 
-  getFirstBook():any {
-    return this.http.get<BookComponentModel>(
+  getFirstBook(): Observable<any> {
+    return this.http.get(
       `http://localhost:8080/api/book/first`);
   }
-  deleteBook(book : BookComponentModel):any {
-    return this.http.delete<BookComponentModel>(
+  deleteBook(book : BookComponentModel):Observable<any> {
+    return this.http.delete(
       `http://localhost:8080/api/book/${book.bookId}`);
   }
 
-  getAllbook():any {
-    return this.http.get<BookComponentModel>(
+  getAllbook():Observable<any> {
+    return this.http.get(
       `http://localhost:8080/api/book`);
   }
 
-  addBook(book: BookComponentModel) {
+  addBook(book: BookComponentModel) :Observable<any>{
     let header = new HttpHeaders();
     header= header.append('content-type', 'application/json');
-    return this.http.post<BookComponentModel>(
+    return this.http.post(
       `http://localhost:8080/api/book`,book, {headers : header});
   }
 
-  updateBook(book: BookComponentModel) {
+  updateBook(book: BookComponentModel):Observable<any> {
     let header = new HttpHeaders();
     header= header.append('content-type', 'application/json');
-    return this.http.put<BookComponentModel>(
+    return this.http.put(
       `http://localhost:8080/api/book`,book, {headers : header});
   }
-  getNewCode() {
-    return this.http.get<BookComponentModel>(
+  getNewCode() :Observable<any>{
+    return this.http.get(
       `http://localhost:8080/api/book/code`);
   }
 
-  findBookByCode(codeBook: string) {
-    return this.http.get<BookComponentModel>(
+  findBookByCode(codeBook: string) :Observable<any>{
+    return this.http.get(
       `http://localhost:8080/api/book/${codeBook}`);
   }
 }

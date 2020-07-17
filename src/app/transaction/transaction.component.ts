@@ -20,7 +20,10 @@ export class TransactionComponent implements OnInit {
   private transOldModel: TransactionModule = new TransactionModule();
   durationInSeconds = 5;
 
-  constructor(private transService: TransactionService,private bookservice: BookService,private memberService: MemberRecordService, private _snackBar: MatSnackBar,
+  constructor(private transService: TransactionService,
+              private bookservice: BookService,
+              private memberService: MemberRecordService,
+              private _snackBar: MatSnackBar,
               public dialog: MatDialog ) {
   }
 

@@ -33,17 +33,30 @@ export class BookComponent implements OnInit {
   private currentItem: BookComponentModel;
   action: string = null;
   titleAction: string = 'Consultation';
+  columns = [
+    {prop: 'bookId'},
+    {name: 'codeBook'},
+    {name: 'author'},
+    {name: 'title'},
+    {name: 'price'},
+    {name: 'rackNo'},
+    {name: 'status'},
+    {name: 'edition'},
+    {name: 'dateOfPurchase'}
+  ];
 
   ngOnInit() {
     this.getFirstBook();
   }
-  getFirstBook(){
-    this.bookservice.getFirstBook().subscribe( result =>{
-      if(result)
-        this.bookComponentModel = result;
+
+  getFirstBook() {
+    this.bookservice.getFirstBook().subscribe(result => {
+        if (result)
+          this.bookComponentModel = result;
       }
     )
   }
+
   getAllbook() {
     this.bookservice.getAllbook().subscribe(resp => {
       this.bookList = resp;
@@ -71,10 +84,12 @@ export class BookComponent implements OnInit {
           data: "Est-ce que vous confirmez la suppression de ce livre?"
         });
         dialogRef.afterClosed().subscribe(result => {
-          if(result) {
-            this.bookservice.deleteBook(this.bookComponentModel).subscribe( result =>{
+          if (result) {
+            this.bookservice.deleteBook(this.bookComponentModel).subscribe(result => {
                 this.openSnackBar(this.initData('Le livre est supprimé avec succès', 'success'));
                 this.getFirstBook();
+              }, error => {
+                this.openSnackBar(this.initData(error.error.message, 'error'));
               }
             )
           }

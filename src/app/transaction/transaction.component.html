@@ -9,11 +9,13 @@
           <div class="panel-body">
             <div class="xs-mt-10 xs-mb-10  ">
               <div class="row">
-                <div class="col-md-8">
-                  <mat-card [ngClass]="{'bg-primary':true}" style="color: white;font-weight: bold">{{titleAction}}</mat-card>
+                <div class="col-md-12">
+                  <mat-toolbar>
+                    <span>{{titleAction}}</span>
+                  </mat-toolbar>
                   <form class="form-horizontal">
                     <div class="row">
-                      <div class="col-sm-9">
+                      <div class="col-sm-12">
                         <div class="row">
                           <div class="col-sm-12">
                             <mat-form-field class="full-width">
@@ -27,7 +29,7 @@
                         <div class="row">
                           <div class="col-sm-12">
                             <mat-form-field class="full-width">
-                              <mat-label>code des membres</mat-label>
+                              <mat-label>Code des membres</mat-label>
                               <mat-select matNativeControl required [ngModelOptions]="{standalone: true}"
                                           [disabled]="action==null"
                                           [(ngModel)]="transactionModule.memberId">
@@ -41,10 +43,10 @@
                         <div class="row">
                           <div class="col-sm-12">
                             <mat-form-field class="full-width">
-                              <mat-label>codes de livers</mat-label>
+                              <mat-label>Codes de livers</mat-label>
                               <mat-select matNativeControl required [ngModelOptions]="{standalone: true}"
                                           [disabled]="action==null"
-                                          [(ngModel)]="transactionModule.bookId">
+                                          [(ngModel)]="transactionModule.idBook">
                                 <mat-option *ngFor="let book of bookList" [value]="book.bookId">
                                   {{book.codeBook}}
                                 </mat-option>
@@ -57,7 +59,7 @@
                             <mat-form-field class="full-width">
                               <mat-label>Choisissez une date d'emission</mat-label>
                               <input class="col-sm-9" matInput [disabled]="action==null" [matDatepicker]="picker"
-                                     required readonly style="color: black"
+                                     required readonly style="color: black" (click)="picker.open()"
                                      [(ngModel)]="transactionModule.dateOfIssue"
                                      id="form-control-11" [ngModelOptions]="{standalone: true}">
                               <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
@@ -68,9 +70,9 @@
                         <div class="row">
                           <div class="col-sm-12">
                             <mat-form-field class="full-width">
-                              <mat-label>Choisissez une date d'echeance</mat-label>
+                              <mat-label>Choisissez une date d'expiration </mat-label>
                               <input class="col-sm-9" matInput [disabled]="action==null" [matDatepicker]="picker1"
-                                     required readonly style="color: black"
+                                     required readonly style="color: black" (click)="picker1.open()"
                                      [(ngModel)]="transactionModule.dueDate"
                                      id="form-control-12" [ngModelOptions]="{standalone: true}">
                               <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
@@ -78,9 +80,6 @@
                             </mat-form-field>
                           </div>
                         </div>
-                      </div>
-                      <div class="col-sm-3">
-                        <img src="assets/images/book.png">
                       </div>
                     </div>
                     <div class="form-group col-sm-12">
@@ -121,5 +120,3 @@
     </div>
   </div>
 </div>
-{{memberList|json}}
-{{transactionModule|json}}

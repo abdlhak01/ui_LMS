@@ -1,6 +1,6 @@
 export class MemberRecordComponentModel {
   memberRecordId: number;
-  memberRecordCode: string;
+  codeMemberRecord: string;
   fullName: string;
   dateOfMemberRecordship: Date;
   maxBookLimit: number;

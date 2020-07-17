@@ -9,12 +9,13 @@
           <div class="panel-body">
             <div class="xs-mt-10 xs-mb-10  ">
               <div class="row">
-                <div class="col-md-8">
-                  <mat-card [ngClass]="{'bg-primary':true}"
-                            style="color: white;font-weight: bold">{{titleAction}}</mat-card>
+                <div class="col-md-12">
+                  <mat-toolbar>
+                    <span>{{titleAction}}</span>
+                  </mat-toolbar>
                   <form class="form-horizontal">
                     <div class="row">
-                      <div class="col-sm-9">
+                      <div class="col-sm-12">
                         <div class="row">
                           <div class="col-sm-12">
                             <mat-form-field class="full-width">
@@ -22,7 +23,7 @@
                               <input matInput placeholder="Code Livre" [readonly]="action!='add' && action!='update' "
                                      required
                                      [ngModelOptions]="{standalone: true}"
-                                     [(ngModel)]="memberRecordComponentModel.memberRecordCode"
+                                     [(ngModel)]="memberRecordComponentModel.codeMemberRecord"
                                      id="form-control-2" class="form-control">
                             </mat-form-field>
                           </div>
@@ -44,7 +45,7 @@
                             <mat-form-field class="full-width">
                               <mat-label>Date d'adhésion</mat-label>
                               <input class="col-sm-9" matInput [disabled]="action==null" [matDatepicker]="picker"
-                                     required readonly style="color: black"
+                                     required readonly style="color: black" (click)="picker.open()"
                                      [(ngModel)]="memberRecordComponentModel.dateOfMemberRecordship"
                                      id="form-control-4" [ngModelOptions]="{standalone: true}">
                               <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
@@ -68,8 +69,8 @@
                           <div class="col-sm-12">
                             <mat-form-field class="full-width">
                               <mat-label>Nombre de livres émis</mat-label>
-                              <input matInput type="number" [readonly]="action!='add' && action!='update' "
-                                     placeholder="Grille" required
+                              <input matInput type="number" [readonly]="true"
+                                     placeholder="Grille"
                                      [ngModelOptions]="{standalone: true}"
                                      [(ngModel)]="memberRecordComponentModel.noBookIssued"
                                      id="form-control-6" class="form-control">
@@ -113,9 +114,6 @@
                             </mat-form-field>
                           </div>
                         </div>
-                      </div>
-                      <div class="col-sm-3">
-                        <img src="src/assets/images/book.png">
                       </div>
                     </div>
                     <div class="form-group col-sm-12">

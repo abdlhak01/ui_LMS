@@ -57,6 +57,7 @@ export class MemberRecordComponent implements OnInit {
       case 'add': {
         this.memberRecordOldeModel = {...this.memberRecordComponentModel};
         this.memberRecordComponentModel = new MemberRecordComponentModel();
+        this.memberRecordComponentModel.noBookIssued=0;
         this.action = 'add';
         this.titleAction = 'Creation';
         break;
@@ -70,13 +71,15 @@ export class MemberRecordComponent implements OnInit {
       case 'delete': {
         const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
           width: '850px',
-          data: "Est-ce que vous confirmez la suppression de ce livre?"
+          data: "Est-ce que vous confirmez la suppression de ce membre?"
         });
         dialogRef.afterClosed().subscribe(result => {
           if (result) {
             this.memberRecordservice.deleteMemberRecord(this.memberRecordComponentModel).subscribe(result => {
-                this.openSnackBar(this.initData('Le livre est supprimé avec succès', 'success'));
+                this.openSnackBar(this.initData('Le membre est supprimé avec succès', 'success'));
                 this.getFirstMemberRecord();
+              },error=>{
+                this.openSnackBar(this.initData(error.error.message, 'error'));
               }
             )
           }
@@ -107,7 +110,7 @@ export class MemberRecordComponent implements OnInit {
           this.currentItem = resp;
           this.action = null;
           this.titleAction = 'Consultation';
-          this.openSnackBar(this.initData('Le livre est ajouté avec succès', 'success'));
+          this.openSnackBar(this.initData('Le membre est ajouté avec succès', 'success'));
         }, error => {
           this.openSnackBar(this.initData(error.error.message, 'error'));
         });
@@ -119,19 +122,16 @@ export class MemberRecordComponent implements OnInit {
           this.currentItem = resp;
           this.action = null;
           this.titleAction = 'Consultation';
-          this.openSnackBar(this.initData('Le livre est modifié avec succès', 'success'));
+          this.openSnackBar(this.initData('Le membre est modifié avec succès', 'success'));
         }, error => {
           this.openSnackBar(this.initData(error.error.message, 'error'));
         });
         break;
       }
-
       case '': {
         break;
       }
-
     }
-
   }
 
   findMemberRecordByCode() {
@@ -139,5 +139,4 @@ export class MemberRecordComponent implements OnInit {
       this.memberRecordComponentModel = resp;
     });
   }
-
 }
