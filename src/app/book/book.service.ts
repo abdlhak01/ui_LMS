@@ -20,8 +20,7 @@ export class BookService {
   }
 
   getAllbook():Observable<any> {
-    return this.http.get(
-      `http://localhost:8080/api/book`);
+    return this.http.get(`http://localhost:8080/api/book`);
   }
 
   addBook(book: BookComponentModel) :Observable<any>{

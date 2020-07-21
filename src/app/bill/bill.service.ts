@@ -14,9 +14,11 @@ export class BillService {
 
   getFirstBill(): Observable<any> {
     return this.http.get(
-      this.URL + `/first`);
+      `http://localhost:8080/api/bill/first`);
   }
-
+  getAllBill():Observable<any> {
+    return this.http.get(`http://localhost:8080/api/bill`);
+  }
   addBill(bill: BillComponentModel) :Observable<any>{
     let header = new HttpHeaders();
     header= header.append('content-type', 'application/json');

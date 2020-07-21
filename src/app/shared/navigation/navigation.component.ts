@@ -17,8 +17,10 @@ export class NavigationComponent implements OnInit {
   showAdminBoard = false;
   showModeratorBoard = false;
   username: string;
+  localStorage = window.localStorage;
 
-  constructor(private titleService: Title, router: Router, activatedRoute: ActivatedRoute,
+  constructor(private titleService: Title, router: Router,
+              activatedRoute: ActivatedRoute,
               private tokenStorageService: TokenStorageService) {
   }
 
@@ -33,7 +35,7 @@ export class NavigationComponent implements OnInit {
 
       this.showAdminBoard = this.roles.includes('ROLE_ADMIN');
       this.showModeratorBoard = this.roles.includes('ROLE_MODERATOR');
-
+      this.localStorage.setItem("showAdminBoard",this.showAdminBoard.toString());
       this.username = user.username;
     }
   }

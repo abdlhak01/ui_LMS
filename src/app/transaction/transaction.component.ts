@@ -1,14 +1,15 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import {TransactionModule} from './transaction.module';
 import {TransactionService} from "./transaction.service";
 import {SnackBarComponent} from "../snack-bar-component/snack-bar-component";
-import {MatSnackBar} from '@angular/material';
+import {MatSnackBar} from '@angular/material/snack-bar';
 import {MatDialog} from '@angular/material/dialog';
 import {ConfirmationDialogComponent} from "../confirmation-dilog/confirmation-dialog.component";
 import {BookService} from "../book/book.service";
-import {BookComponentModel } from 'app/book/book.component.model';
-import {MemberRecordService } from '../membre/member-record.service';
+import {BookComponentModel} from 'app/book/book.component.model';
+import {MemberRecordService} from '../membre/member-record.service';
 import {MemberRecordComponentModel} from '../membre/member-record.model';
+import {ColumnMode, DatatableComponent, SelectionType} from "@swimlane/ngx-datatable";
 
 @Component({
   selector: 'app-transaction',
@@ -24,7 +25,7 @@ export class TransactionComponent implements OnInit {
               private bookservice: BookService,
               private memberService: MemberRecordService,
               private _snackBar: MatSnackBar,
-              public dialog: MatDialog ) {
+              public dialog: MatDialog) {
   }
 
   openSnackBar(message) {
@@ -34,7 +35,16 @@ export class TransactionComponent implements OnInit {
     });
   }
 
-  transList: TransactionModule[];
+  transList = [];
+  transTempList = [];
+  enableAtteindre = false;
+  columns: any[] = [
+    {name: 'codeTrans'},
+    {name: 'memberCode'},
+    {name: 'bookCode'},
+    {name: 'dateOfIssue'},
+    {name: 'dateOfIssue'},
+  ];
   transactionModule: TransactionModule = new TransactionModule();
   private currentItem: TransactionModule;
   action: string = null;
@@ -45,6 +55,7 @@ export class TransactionComponent implements OnInit {
     // dispaly DropDown in form transaction
     this.getDropDownInBook();
     this.getDropDownInMember();
+    this.getAllTrans();
   }
 
   getFirstTrans() {
@@ -53,18 +64,54 @@ export class TransactionComponent implements OnInit {
       }
     )
   }
+
   bookList: BookComponentModel[] = [];
 
-  getDropDownInBook(){
+  getDropDownInBook() {
     this.bookservice.getAllbook().subscribe(result => {
       result.forEach(element => {
         this.bookList.push(element);
       })
     })
   }
-  memberList: MemberRecordComponentModel[] = [];
 
-  getDropDownInMember(){
+  memberList: MemberRecordComponentModel[] = [];
+  @ViewChild(DatatableComponent) table: DatatableComponent;
+  SelectionType = SelectionType;
+  ColumnMode = ColumnMode;
+
+  selected = [];
+  @ViewChild('closebutton') closebutton;
+
+  updateFilter(event) {
+    const val = event.target.value.toLowerCase();
+
+    // filter our data
+    const temp = this.transTempList.filter(function (d) {
+      if (d && d.codeTrans)
+        return d.codeTrans.toLowerCase().indexOf(val) !== -1 || !val;
+    });
+
+    // update the rows
+    this.transList = temp;
+    // Whenever the filter changes, always go back to the first page
+    this.table.offset = 0;
+  }
+
+  onSelect() {
+    this.enableAtteindre = true;
+  }
+
+  onActivate(event) {
+    console.log('Activate Event', event);
+  }
+
+  atteindre() {
+    this.transactionModule = this.selected[0];
+    this.closebutton.nativeElement.click()
+  }
+
+  getDropDownInMember() {
     this.memberService.getAllmemberRecord().subscribe(result => {
       result.forEach(element => {
         this.memberList.push(element)
@@ -74,6 +121,7 @@ export class TransactionComponent implements OnInit {
 
   getAllTrans() {
     this.transService.getAllTrans().subscribe(resp => {
+      this.transTempList = [...resp];
       this.transList = resp;
     });
   }
@@ -103,6 +151,7 @@ export class TransactionComponent implements OnInit {
             this.transService.deleteTrans(this.transactionModule).subscribe(result => {
                 this.openSnackBar(this.initData('La transaction est supprimé avec succès', 'success'));
                 this.getFirstTrans();
+                this.getAllTrans();
               }
             )
           }
@@ -135,6 +184,7 @@ export class TransactionComponent implements OnInit {
           this.action = null;
           this.titleAction = 'Consultation';
           this.openSnackBar(this.initData('La transaction est ajouté avec succès', 'success'));
+          this.getAllTrans();
         }, error => {
           this.openSnackBar(this.initData(error.error.message, 'error'));
         });
@@ -147,6 +197,7 @@ export class TransactionComponent implements OnInit {
           this.action = null;
           this.titleAction = 'Consultation';
           this.openSnackBar(this.initData('La transaction est modifié avec succès', 'success'));
+          this.getAllTrans();
         }, error => {
           this.openSnackBar(this.initData(error.error.message, 'error'));
         });
@@ -158,12 +209,5 @@ export class TransactionComponent implements OnInit {
       }
     }
   }
-
-  findTransByCode(){
-    this.transService.findTransactionByCode(this.transactionModule.codeTrans).subscribe(resp => {
-      this.transactionModule = resp ;
-    });
-  }
-
 
 }

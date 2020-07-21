@@ -1,13 +1,14 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import {BillComponentModel} from './bill.model';
 import {BillService} from "./bill.service";
 import {SnackBarComponent} from "../snack-bar-component/snack-bar-component";
-import {MatSnackBar} from '@angular/material';
+import {MatSnackBar} from '@angular/material/snack-bar';
 import {MatDialog} from '@angular/material/dialog';
 import {ConfirmationDialogComponent} from "../confirmation-dilog/confirmation-dialog.component";
 import {MemberRecordComponentModel} from "../membre/member-record.model";
 import {MemberRecordService} from "../membre/member-record.service";
-import {DatePipe} from "@angular/common";
+import {ColumnMode, DatatableComponent, SelectionType} from "@swimlane/ngx-datatable";
+
 @Component({
   selector: 'app-bill',
   templateUrl: './bill.component.html',
@@ -17,11 +18,11 @@ export class BillComponent implements OnInit {
 
   private billOldeModel: BillComponentModel = new BillComponentModel();
   durationInSeconds = 5;
+  enableAtteindre: boolean = false;
 
   constructor(private billservice: BillService,
               private _snackBar: MatSnackBar,
               public dialog: MatDialog,
-              public datepipe: DatePipe,
               private memberService: MemberRecordService) {
   }
 
@@ -31,12 +32,18 @@ export class BillComponent implements OnInit {
       data: message
     });
   }
-  getFirstBill(){
-    this.billservice.getFirstBill().subscribe( result =>{
-        if(result)
-          this.billComponentModel = result;
-      }
-    )
+
+  getFirstBill() {
+    this.billservice.getFirstBill().subscribe(result => {
+      this.billComponentModel = result;
+    });
+  }
+
+  getAllBill() {
+    this.billservice.getAllBill().subscribe(result => {
+      this.billTempList = [...result];
+      this.billList = result;
+    });
   }
 
   billComponentModel: BillComponentModel = new BillComponentModel();
@@ -47,18 +54,31 @@ export class BillComponent implements OnInit {
   ngOnInit() {
     this.getFirstBill();
     this.getDropDownInMember();
+    this.getAllBill();
   }
 
-  memberList: MemberRecordComponentModel[] = [];
+  memberList = [];
+  billList = [];
+  billTempList = [];
+  @ViewChild(DatatableComponent) table: DatatableComponent;
+  SelectionType = SelectionType;
+  ColumnMode = ColumnMode;
+  columns: any[] = [
+    {name: 'codeBill'},
+    {name: 'date'},
+    {name: 'memberCode'},
+    {name: 'amount'},
+  ];
+  selected = [];
+  @ViewChild('closebutton') closebutton;
 
-  getDropDownInMember(){
+  getDropDownInMember() {
     this.memberService.getAllmemberRecord().subscribe(result => {
       result.forEach(element => {
         this.memberList.push(element)
       })
     })
   }
-
 
 
   startAction(action: string) {
@@ -82,10 +102,11 @@ export class BillComponent implements OnInit {
           data: "Est-ce que vous confirmez la suppression de ce livre?"
         });
         dialogRef.afterClosed().subscribe(result => {
-          if(result) {
-            this.billservice.deleteBill(this.billComponentModel).subscribe( result =>{
+          if (result) {
+            this.billservice.deleteBill(this.billComponentModel).subscribe(result => {
                 this.openSnackBar(this.initData('La facture est supprimé avec succès', 'success'));
                 this.getFirstBill();
+                this.getAllBill();
               }
             )
           }
@@ -117,6 +138,7 @@ export class BillComponent implements OnInit {
           this.action = null;
           this.titleAction = 'Consultation';
           this.openSnackBar(this.initData('La facture est ajouté avec succès', 'success'));
+          this.getAllBill();
         }, error => {
           this.openSnackBar(this.initData(error.error.message, 'error'));
         });
@@ -129,6 +151,7 @@ export class BillComponent implements OnInit {
           this.action = null;
           this.titleAction = 'Consultation';
           this.openSnackBar(this.initData('La Facture est modifié avec succès', 'success'));
+          this.getAllBill();
         }, error => {
           this.openSnackBar(this.initData(error.error.message, 'error'));
         });
@@ -140,7 +163,35 @@ export class BillComponent implements OnInit {
     }
   }
 
-  async export($event) {
+  updateFilter(event) {
+    const val = event.target.value.toLowerCase();
+
+    // filter our data
+    const temp = this.billTempList.filter(function (d) {
+      if (d && d.codeBill)
+        return d.codeBill.toLowerCase().indexOf(val) !== -1 || !val;
+    });
+
+    // update the rows
+    this.billList = temp;
+    // Whenever the filter changes, always go back to the first page
+    this.table.offset = 0;
+  }
+
+  onSelect() {
+    this.enableAtteindre = true;
+  }
+
+  onActivate(event) {
+    console.log('Activate Event', event);
+  }
+
+  atteindre() {
+    this.billComponentModel = this.selected[0];
+    this.closebutton.nativeElement.click()
+  }
+
+  /*async export($event) {
     $event.stopPropagation();
     $event.preventDefault();
 
@@ -155,5 +206,5 @@ export class BillComponent implements OnInit {
       err => {
       }
     );
-  }
+  }*/
 }

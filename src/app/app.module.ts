@@ -37,6 +37,7 @@ import { BoardModeratorComponent } from './board-moderator/board-moderator.compo
 import { BoardUserComponent } from './board-user/board-user.component';
 import {MatToolbarModule} from "@angular/material/toolbar";
 import { BillComponent } from './bill/bill.component';
+import {NgxDatatableModule} from "@swimlane/ngx-datatable";
 
 @NgModule({
   declarations: [
@@ -79,7 +80,8 @@ import { BillComponent } from './bill/bill.component';
     MatDialogModule,
     MatButtonModule,
     MatSelectModule,
-    MatToolbarModule
+    MatToolbarModule,
+    NgxDatatableModule
   ],
   entryComponents: [
     SnackBarComponent,

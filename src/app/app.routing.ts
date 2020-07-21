@@ -29,27 +29,6 @@ export const routes: Routes = [{
     },
     children: [
       {
-        path: 'dashboard',
-        loadChildren: () => import('./dashboard/dashboard.module').then(m => m.DashboardModule),
-        data: {
-          title: 'Dashboard Page'
-        },
-      },
-      {
-        path: 'ui-elements',
-        loadChildren: () => import('./ui-elements/ui-elements.module').then(m => m.UiElementsModule),
-        data: {
-          title: 'UI Elements'
-        },
-      },
-      {
-        path: 'forms',
-        loadChildren: () => import('./forms/forms.module').then(m => m.FormsModule),
-        data: {
-          title: 'Form Page'
-        },
-      },
-      {
         path: 'books',
         component: BookComponent,
         data: {

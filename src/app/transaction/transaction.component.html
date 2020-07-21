@@ -4,7 +4,42 @@
       <div class="col-sm-12">
         <div class="panel panel-default">
           <div class="panel-heading panel-heading-divider">Transaction<span
-            class="panel-subtitle">Maintenance des transaction</span>
+            class="panel-subtitle">Maintenance des transactions</span>
+          </div>
+          <div tabindex="-1" role="dialog" class="modal overlay" id="exampleModal" data-backdrop="false">
+            <div class="modal-dialog modal-xl" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title">Rechercher des Transactions</h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                  <input
+                    type="text"
+                    style="padding:8px;margin:15px auto;width:30%;"
+                    placeholder="Rechercher par Code Transaction..."
+                    (keyup)="updateFilter($event)"
+                  />
+                  <ngx-datatable #table [rows]="transList" [columns]="columns" [columnMode]="ColumnMode.force"
+                                 [headerHeight]="40"
+                                 [rowHeight]="40"
+                                 [limit]="5" [selected]="selected"
+                                 [selectionType]="SelectionType.single"
+                                 (activate)="onActivate($event)"
+                                 [footerHeight]="50"
+                                 rowHeight="auto"
+                                 (select)="onSelect()" class="material">
+                  </ngx-datatable>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" [disabled]="!enableAtteindre" (click)="atteindre()" class="btn btn-primary">Atteindre
+                  </button>
+                  <button #closebutton type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+              </div>
+            </div>
           </div>
           <div class="panel-body">
             <div class="xs-mt-10 xs-mb-10  ">
@@ -20,7 +55,8 @@
                           <div class="col-sm-12">
                             <mat-form-field class="full-width">
                               <mat-label>Code transaction</mat-label>
-                              <input matInput placeholder="Code transaction" [readonly]="action!='add' && action!='update' " required
+                              <input matInput placeholder="Code transaction"
+                                     [readonly]="action!='add' && action!='update' " required
                                      [ngModelOptions]="{standalone: true}" [(ngModel)]="transactionModule.codeTrans"
                                      id="form-control-2" class="form-control">
                             </mat-form-field>
@@ -70,7 +106,7 @@
                         <div class="row">
                           <div class="col-sm-12">
                             <mat-form-field class="full-width">
-                              <mat-label>Choisissez une date d'expiration </mat-label>
+                              <mat-label>Choisissez une date d'expiration</mat-label>
                               <input class="col-sm-9" matInput [disabled]="action==null" [matDatepicker]="picker1"
                                      required readonly style="color: black" (click)="picker1.open()"
                                      [(ngModel)]="transactionModule.dueDate"
@@ -91,7 +127,9 @@
                           <button (click)="startAction('update')" class="btn btn-space btn-success">Modifier</button>
                         </div>
                         <div class="col-md-2">
-                          <button (click)="startAction('search')" class="btn btn-space btn-warning">Rechercher</button>
+                          <button data-toggle="modal" data-target="#exampleModal" class="btn btn-space btn-warning">
+                            Rechercher
+                          </button>
                         </div>
                         <div class="col-md-2">
                           <button (click)="startAction('delete')" class="btn btn-space btn-danger">Supprimer</button>

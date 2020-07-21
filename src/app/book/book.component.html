@@ -6,6 +6,40 @@
           <div class="panel-heading panel-heading-divider">Livres<span
             class="panel-subtitle">Maintenance des livres</span>
           </div>
+          <div tabindex="-1" role="dialog" class="modal overlay" id="exampleModal" data-backdrop="false">
+            <div class="modal-dialog modal-xl" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title">Rechercher des Livres</h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                  <input
+                    type="text"
+                    style="padding:8px;margin:15px auto;width:30%;"
+                    placeholder="Rechercher par Code livre..."
+                    (keyup)="updateFilter($event)"
+                  />
+                  <ngx-datatable #table [rows]="bookList" [columns]="columns"  [columnMode]="ColumnMode.force"
+                                 [headerHeight]="40"
+                                 [rowHeight]="40"
+                                 [limit]="5" [selected]="selected"
+                                 [selectionType]="SelectionType.single"
+                                 (activate)="onActivate($event)"
+                                 [footerHeight]="50"
+                                 rowHeight="auto"
+                                 (select)="onSelect()" class="material">
+                  </ngx-datatable>
+                </div>
+                <div class="modal-footer">
+                  <button  type="button" [disabled]="!enableAtteindre" (click)="atteindre()" class="btn btn-primary">Atteindre</button>
+                  <button #closebutton type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+              </div>
+            </div>
+          </div>
           <div class="panel-body">
             <div class="xs-mt-10 xs-mb-10  ">
               <div class="row">
@@ -47,7 +81,6 @@
                             </mat-form-field>
                           </div>
                         </div>
-
                         <div class="row">
 
                           <div class="col-sm-12">
@@ -142,27 +175,6 @@
             </div>
           </div>
         </div>
-      </div>
-    </div>
-  </div>
-</div>
-
-
-<div class="modal" tabindex="-1" role="dialog">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title">Modal title</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <!--<ngx-datatable [rows]="bookList" [columns]="columns"> </ngx-datatable>-->
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-primary">Save changes</button>
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
       </div>
     </div>
   </div>

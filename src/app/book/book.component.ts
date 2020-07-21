@@ -1,10 +1,12 @@
-import {AfterViewInit, Component, OnInit} from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import {BookComponentModel} from './book.component.model';
 import {BookService} from "./book.service";
 import {SnackBarComponent} from "../snack-bar-component/snack-bar-component";
-import {MatSnackBar} from '@angular/material';
+import {MatSnackBar} from '@angular/material/snack-bar';
 import {MatDialog} from '@angular/material/dialog';
 import {ConfirmationDialogComponent} from "../confirmation-dilog/confirmation-dialog.component";
+import {ColumnMode, DatatableComponent, SelectionType} from "@swimlane/ngx-datatable";
+
 
 @Component({
   selector: 'app-book',
@@ -28,13 +30,14 @@ export class BookComponent implements OnInit {
     });
   }
 
-  bookList: BookComponentModel[];
+  bookList = [];
+  bookTempList = [];
   bookComponentModel: BookComponentModel = new BookComponentModel();
   private currentItem: BookComponentModel;
   action: string = null;
   titleAction: string = 'Consultation';
-  columns = [
-    {prop: 'bookId'},
+  enableAtteindre = false;
+  columns: any[] = [
     {name: 'codeBook'},
     {name: 'author'},
     {name: 'title'},
@@ -44,9 +47,16 @@ export class BookComponent implements OnInit {
     {name: 'edition'},
     {name: 'dateOfPurchase'}
   ];
+  @ViewChild(DatatableComponent) table: DatatableComponent;
+  SelectionType = SelectionType;
+  ColumnMode = ColumnMode;
+
+  selected = [];
+  @ViewChild('closebutton') closebutton;
 
   ngOnInit() {
     this.getFirstBook();
+    this.getAllbook();
   }
 
   getFirstBook() {
@@ -59,6 +69,7 @@ export class BookComponent implements OnInit {
 
   getAllbook() {
     this.bookservice.getAllbook().subscribe(resp => {
+      this.bookTempList = [...resp];
       this.bookList = resp;
     });
   }
@@ -88,6 +99,7 @@ export class BookComponent implements OnInit {
             this.bookservice.deleteBook(this.bookComponentModel).subscribe(result => {
                 this.openSnackBar(this.initData('Le livre est supprimé avec succès', 'success'));
                 this.getFirstBook();
+                this.getAllbook();
               }, error => {
                 this.openSnackBar(this.initData(error.error.message, 'error'));
               }
@@ -121,6 +133,7 @@ export class BookComponent implements OnInit {
           this.action = null;
           this.titleAction = 'Consultation';
           this.openSnackBar(this.initData('Le livre est ajouté avec succès', 'success'));
+          this.getAllbook();
         }, error => {
           this.openSnackBar(this.initData(error.error.message, 'error'));
         });
@@ -133,6 +146,7 @@ export class BookComponent implements OnInit {
           this.action = null;
           this.titleAction = 'Consultation';
           this.openSnackBar(this.initData('Le livre est modifié avec succès', 'success'));
+          this.getAllbook();
         }, error => {
           this.openSnackBar(this.initData(error.error.message, 'error'));
         });
@@ -147,10 +161,31 @@ export class BookComponent implements OnInit {
 
   }
 
-  findBookByCode() {
-    this.bookservice.findBookByCode(this.bookComponentModel.codeBook).subscribe(resp => {
-      this.bookComponentModel = resp;
+  updateFilter(event) {
+    const val = event.target.value.toLowerCase();
+
+    // filter our data
+    const temp = this.bookTempList.filter(function (d) {
+      if (d && d.codeBook)
+        return d.codeBook.toLowerCase().indexOf(val) !== -1 || !val;
     });
+
+    // update the rows
+    this.bookList = temp;
+    // Whenever the filter changes, always go back to the first page
+    this.table.offset = 0;
   }
 
+  onSelect() {
+    this.enableAtteindre = true;
+  }
+
+  onActivate(event) {
+    console.log('Activate Event', event);
+  }
+
+  atteindre() {
+    this.bookComponentModel = this.selected[0];
+    this.closebutton.nativeElement.click()
+  }
 }
