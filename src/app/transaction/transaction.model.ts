@@ -1,4 +1,4 @@
-export class TransactionModule {
+export class TransactionModel {
   transId: number;
   codeTrans: string;
   memberId: number;

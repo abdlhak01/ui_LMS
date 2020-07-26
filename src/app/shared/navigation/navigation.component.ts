@@ -3,6 +3,7 @@ import {AuthService} from "../../_services/auth.service";
 import {TokenStorageService} from "../../_services/token-storage.service";
 import {Title} from "@angular/platform-browser";
 import {ActivatedRoute, Router} from "@angular/router";
+import {BehaviorSubject} from "rxjs";
 
 @Component({
   selector: 'app-navigation',
@@ -17,7 +18,8 @@ export class NavigationComponent implements OnInit {
   showAdminBoard = false;
   showModeratorBoard = false;
   username: string;
-  localStorage = window.localStorage;
+  fullName: string;
+
 
   constructor(private titleService: Title, router: Router,
               activatedRoute: ActivatedRoute,
@@ -32,10 +34,10 @@ export class NavigationComponent implements OnInit {
     if (this.isLoggedIn) {
       const user = this.tokenStorageService.getUser();
       this.roles = user.roles;
-
+      this.fullName = user.firstName +" " + user.lastName;
       this.showAdminBoard = this.roles.includes('ROLE_ADMIN');
+      this.tokenStorageService.updatedDataSelection(this.showAdminBoard);
       this.showModeratorBoard = this.roles.includes('ROLE_MODERATOR');
-      this.localStorage.setItem("showAdminBoard",this.showAdminBoard.toString());
       this.username = user.username;
     }
   }

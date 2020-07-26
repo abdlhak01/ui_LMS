@@ -14,13 +14,6 @@ export const routes: Routes = [{
   redirectTo: 'dashboard',
   pathMatch: 'full'
 },
-  /*{path: 'home', component: HomeComponent},
-  {path: 'login', component: LoginComponent},
-  {path: 'profile', component: ProfileComponent},
-  {path: 'user', component: BoardUserComponent},
-  {path: 'mod', component: BoardModeratorComponent},
-  {path: 'admin', component: BoardAdminComponent},
-  {path: '', redirectTo: 'home', pathMatch: 'full'},*/
   {
     path: '',
     component: LeftNavTemplateComponent,

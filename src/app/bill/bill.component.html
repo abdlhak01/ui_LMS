@@ -47,7 +47,7 @@
                   <mat-toolbar>
                     <span>{{titleAction}}</span>
                   </mat-toolbar>
-                  <form class="form-horizontal" (ngSubmit)="callAction()" #form="ngForm">
+                  <form [formGroup]="myForm" autocomplete="off" class="form-horizontal" >
                     <div class="row">
                       <div class="col-sm-12">
                         <div class="row">
@@ -56,22 +56,28 @@
                               <mat-label>Code Facture</mat-label>
                               <input matInput placeholder="Code Facture" [readonly]="action!='add' && action!='update' "
                                      required
-                                     [ngModelOptions]="{standalone: true}" [(ngModel)]="billComponentModel.codeBill"
+                                     formControlName="codeBill" [(ngModel)]="billComponentModel.codeBill"
                                      id="form-control-2" class="form-control">
+                            <mat-error *ngIf="hasError('codeBill', 'required')">
+                                <strong>Code Facture</strong> est nécessaire
+                              </mat-error>
                             </mat-form-field>
                           </div>
                         </div>
                         <div class="row">
                           <div class="col-sm-12">
                             <mat-form-field class="full-width">
-                              <mat-label>Code des membres</mat-label>
-                              <mat-select matNativeControl required [ngModelOptions]="{standalone: true}"
+                              <mat-label>Code des membre</mat-label>
+                              <mat-select matNativeControl required formControlName="memberId"
                                           [disabled]="action==null"
                                           [(ngModel)]="billComponentModel.memberId">
                                 <mat-option *ngFor="let member of memberList" [value]="member.memberRecordId">
                                   {{member.codeMemberRecord}}
                                 </mat-option>
                               </mat-select>
+                            <mat-error *ngIf="hasError('memberId', 'required')">
+                                <strong>Code membre</strong> est nécessaire
+                              </mat-error>
                             </mat-form-field>
                           </div>
                         </div>
@@ -82,9 +88,12 @@
                               <input class="col-sm-9" matInput [disabled]="action==null" [matDatepicker]="picker"
                                      required readonly style="color: black" (click)="picker.open()"
                                      [(ngModel)]="billComponentModel.date"
-                                     id="form-control-11" [ngModelOptions]="{standalone: true}">
+                                     id="form-control-11" formControlName="date">
                               <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
                               <mat-datepicker #picker></mat-datepicker>
+                            <mat-error *ngIf="hasError('date', 'required')">
+                                <strong>Date d'achat</strong> est nécessaire
+                              </mat-error>
                             </mat-form-field>
                           </div>
                         </div>
@@ -95,8 +104,11 @@
                               <mat-label>Prix</mat-label>
                               <input matInput [readonly]="action!='add' && action!='update' " placeholder="Prix"
                                      required type="number"
-                                     [ngModelOptions]="{standalone: true}" [(ngModel)]="billComponentModel.amount"
+                                     formControlName="amount" [(ngModel)]="billComponentModel.amount"
                                      id="form-control-7" class="form-control">
+                            <mat-error *ngIf="hasError('amount', 'required')">
+                                <strong>Prix</strong> est nécessaire
+                              </mat-error>
                             </mat-form-field>
                           </div>
                         </div>
@@ -117,7 +129,7 @@
                           </button>
                         </div>
                         <div class="col-md-2">
-                          <button (click)="startAction('Imprimer')" class="btn btn-space btn-dark">Imprimer</button>
+                          <button (click)="export($event)" class="btn btn-space btn-dark">Imprimer</button>
                         </div>
                         <div class="col-md-2">
                           <button (click)="startAction('delete')" class="btn btn-space btn-danger">Supprimer</button>
@@ -125,7 +137,7 @@
                       </div>
                       <div class="row center-block" *ngIf="action!=null">
                         <div class="col-md-2">
-                          <button [disabled]="action==null" (click)="form.onSubmit()"
+                          <button [disabled]="action==null || !myForm.valid" (click)="callAction()"
                                   class="btn btn-space btn-primary">Valider
                           </button>
                         </div>

@@ -38,6 +38,7 @@ import { BoardUserComponent } from './board-user/board-user.component';
 import {MatToolbarModule} from "@angular/material/toolbar";
 import { BillComponent } from './bill/bill.component';
 import {NgxDatatableModule} from "@swimlane/ngx-datatable";
+import {DatePipe} from "@angular/common";
 
 @NgModule({
   declarations: [
@@ -91,7 +92,8 @@ import {NgxDatatableModule} from "@swimlane/ngx-datatable";
     {provide: DateAdapter, useClass: AppDateAdapter},
     {provide: MAT_DATE_FORMATS, useValue: APP_DATE_FORMATS},
     RxStompService,
-    ProgressWebsocketService
+    ProgressWebsocketService,
+    DatePipe,
   ],
   bootstrap: [AppComponent]
 })

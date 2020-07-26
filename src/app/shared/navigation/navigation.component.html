@@ -1,4 +1,4 @@
-<div class="sidebar hidden-sm-down" >
+<div class="sidebar hidden-sm-down">
   <ul class="nav in" id="side-menu">
     <!--<li class="sidebar-search hidden-sm hidden-md hidden-lg">
        input-group
@@ -13,8 +13,8 @@
         <div class="profile-img">
           <img src="assets/images/user.png"/>
         </div>
-        <span>Steve Gection</span>
-        <small class="text-center">Senior Developer</small>
+        <span>{{fullName}}</span>
+        <small class="text-center">Admin</small>
       </a>
     </li>
     <!-- <li class=""><a href="javascript:void(0);" class="waves-effect"><i class="fa fa-envelope-o"></i> <span
@@ -42,20 +42,20 @@
       </li>
       <li>
         <a [routerLink]="['/bill']" [routerLinkActive]="['active']">
-          <i class="fa fa-file-invoice"></i>
+          <i class="fa fa-file"></i>
           <span class="hide-menu">Facture</span>
         </a>
       </li>
     </ng-container>
     <li *ngIf="!showAdminBoard">
       <a [routerLink]="['/login']" [routerLinkActive]="['active']">
-        <i class="fa fa-users"></i>
+        <i class="fa fa-user-o"></i>
         <span class="hide-menu">Login</span>
       </a>
     </li>
     <li>
       <a [routerLink]="['/register']" [routerLinkActive]="['active']">
-        <i class="far fa-user"></i>
+        <i class="fa fa-user-o"></i>
         <span class="hide-menu">Créer un compte</span>
       </a>
     </li>

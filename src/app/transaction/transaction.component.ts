@@ -1,5 +1,5 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
-import {TransactionModule} from './transaction.module';
+import {TransactionModel} from './transaction.model';
 import {TransactionService} from "./transaction.service";
 import {SnackBarComponent} from "../snack-bar-component/snack-bar-component";
 import {MatSnackBar} from '@angular/material/snack-bar';
@@ -10,6 +10,7 @@ import {BookComponentModel} from 'app/book/book.component.model';
 import {MemberRecordService} from '../membre/member-record.service';
 import {MemberRecordComponentModel} from '../membre/member-record.model';
 import {ColumnMode, DatatableComponent, SelectionType} from "@swimlane/ngx-datatable";
+import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 
 @Component({
   selector: 'app-transaction',
@@ -18,7 +19,7 @@ import {ColumnMode, DatatableComponent, SelectionType} from "@swimlane/ngx-datat
 })
 export class TransactionComponent implements OnInit {
 
-  private transOldModel: TransactionModule = new TransactionModule();
+  private transOldModel: TransactionModel = new TransactionModel();
   durationInSeconds = 5;
 
   constructor(private transService: TransactionService,
@@ -38,6 +39,7 @@ export class TransactionComponent implements OnInit {
   transList = [];
   transTempList = [];
   enableAtteindre = false;
+  myForm: FormGroup;
   columns: any[] = [
     {name: 'codeTrans'},
     {name: 'memberCode'},
@@ -45,8 +47,8 @@ export class TransactionComponent implements OnInit {
     {name: 'dateOfIssue'},
     {name: 'dateOfIssue'},
   ];
-  transactionModule: TransactionModule = new TransactionModule();
-  private currentItem: TransactionModule;
+  transactionModule: TransactionModel = new TransactionModel();
+  private currentItem: TransactionModel;
   action: string = null;
   titleAction: string = 'Consultation';
 
@@ -56,6 +58,17 @@ export class TransactionComponent implements OnInit {
     this.getDropDownInBook();
     this.getDropDownInMember();
     this.getAllTrans();
+    this.myForm = new FormGroup({
+      codeTrans: new FormControl(this.transactionModule.codeTrans, [Validators.required]),
+      memberId: new FormControl(this.transactionModule.memberId, [Validators.required]),
+      idBook: new FormControl(this.transactionModule.idBook, [Validators.required]),
+      dateOfIssue: new FormControl(this.transactionModule.dateOfIssue, [Validators.required]),
+      dueDate: new FormControl(this.transactionModule.dueDate, [Validators.required]),
+    });
+  }
+
+  public hasError = (controlName: string, errorName: string) => {
+    return this.myForm.controls[controlName].hasError(errorName);
   }
 
   getFirstTrans() {
@@ -130,7 +143,7 @@ export class TransactionComponent implements OnInit {
     switch (action) {
       case 'add': {
         this.transOldModel = {...this.transactionModule};
-        this.transactionModule = new TransactionModule();
+        this.transactionModule = new TransactionModel();
         this.action = 'add';
         this.titleAction = 'Creation';
         break;
@@ -178,30 +191,34 @@ export class TransactionComponent implements OnInit {
   callAction() {
     switch (this.action) {
       case 'add': {
-        this.transService.addTrans(this.transactionModule).subscribe(resp => {
-          this.transactionModule = resp;
-          this.currentItem = resp;
-          this.action = null;
-          this.titleAction = 'Consultation';
-          this.openSnackBar(this.initData('La transaction est ajouté avec succès', 'success'));
-          this.getAllTrans();
-        }, error => {
-          this.openSnackBar(this.initData(error.error.message, 'error'));
-        });
-        break;
+        if (this.myForm.valid) {
+          this.transService.addTrans(this.transactionModule).subscribe(resp => {
+            this.transactionModule = resp;
+            this.currentItem = resp;
+            this.action = null;
+            this.titleAction = 'Consultation';
+            this.openSnackBar(this.initData('La transaction est ajouté avec succès', 'success'));
+            this.getAllTrans();
+          }, error => {
+            this.openSnackBar(this.initData(error.error.message, 'error'));
+          });
+          break;
+        }
       }
       case 'update': {
-        this.transService.updateTrans(this.transactionModule).subscribe(resp => {
-          this.transactionModule = resp;
-          this.currentItem = resp;
-          this.action = null;
-          this.titleAction = 'Consultation';
-          this.openSnackBar(this.initData('La transaction est modifié avec succès', 'success'));
-          this.getAllTrans();
-        }, error => {
-          this.openSnackBar(this.initData(error.error.message, 'error'));
-        });
-        break;
+        if (this.myForm.valid) {
+          this.transService.updateTrans(this.transactionModule).subscribe(resp => {
+            this.transactionModule = resp;
+            this.currentItem = resp;
+            this.action = null;
+            this.titleAction = 'Consultation';
+            this.openSnackBar(this.initData('La transaction est modifié avec succès', 'success'));
+            this.getAllTrans();
+          }, error => {
+            this.openSnackBar(this.initData(error.error.message, 'error'));
+          });
+          break;
+        }
       }
 
       case '': {

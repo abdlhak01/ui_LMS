@@ -6,6 +6,7 @@ import {ConfirmationDialogComponent} from "../confirmation-dilog/confirmation-di
 import {MemberRecordComponentModel} from "./member-record.model";
 import {MemberRecordService} from "./member-record.service";
 import {ColumnMode, DatatableComponent, SelectionType} from "@swimlane/ngx-datatable";
+import {FormControl, FormGroup, Validators} from "@angular/forms";
 
 @Component({
   selector: 'app-membre-record',
@@ -34,6 +35,7 @@ export class MemberRecordComponent implements OnInit {
   memberRecordTempList = [];
   memberRecordComponentModel: MemberRecordComponentModel = new MemberRecordComponentModel();
   private currentItem: MemberRecordComponentModel;
+  myForm: FormGroup;
   action: string = null;
   titleAction: string = 'Consultation';
   @ViewChild(DatatableComponent) table: DatatableComponent;
@@ -53,7 +55,21 @@ export class MemberRecordComponent implements OnInit {
   @ViewChild('closebutton') closebutton;
   ngOnInit() {
     this.getFirstMemberRecord();
-    this.getAllmemberRecord()
+    this.getAllmemberRecord();
+    this.myForm = new FormGroup({
+      codeMemberRecord: new FormControl(this.memberRecordComponentModel.codeMemberRecord, [Validators.required]),
+      fullName: new FormControl(this.memberRecordComponentModel.fullName, [Validators.required]),
+      dateOfMemberRecordship: new FormControl(this.memberRecordComponentModel.dateOfMemberRecordship, [Validators.required]),
+      maxBookLimit: new FormControl(this.memberRecordComponentModel.maxBookLimit, [Validators.required]),
+      noBookIssued: new FormControl(this.memberRecordComponentModel.noBookIssued, [Validators.required]),
+      phoneNo: new FormControl(this.memberRecordComponentModel.phoneNo, [Validators.required]),
+      type: new FormControl(this.memberRecordComponentModel.type, [Validators.required]),
+      adress: new FormControl(this.memberRecordComponentModel.adress, [Validators.required]),
+    });
+  }
+
+  public hasError = (controlName: string, errorName: string) => {
+    return this.myForm.controls[controlName].hasError(errorName);
   }
 
   getFirstMemberRecord() {
@@ -76,7 +92,7 @@ export class MemberRecordComponent implements OnInit {
       case 'add': {
         this.memberRecordOldeModel = {...this.memberRecordComponentModel};
         this.memberRecordComponentModel = new MemberRecordComponentModel();
-        this.memberRecordComponentModel.noBookIssued=0;
+        this.memberRecordComponentModel.noBookIssued = 0;
         this.action = 'add';
         this.titleAction = 'Creation';
         break;
@@ -98,7 +114,7 @@ export class MemberRecordComponent implements OnInit {
                 this.openSnackBar(this.initData('Le membre est supprimé avec succès', 'success'));
                 this.getFirstMemberRecord();
                 this.getAllmemberRecord();
-              },error=>{
+              }, error => {
                 this.openSnackBar(this.initData(error.error.message, 'error'));
               }
             )
@@ -125,30 +141,34 @@ export class MemberRecordComponent implements OnInit {
   callAction() {
     switch (this.action) {
       case 'add': {
-        this.memberRecordservice.addMemberRecord(this.memberRecordComponentModel).subscribe(resp => {
-          this.memberRecordComponentModel = resp;
-          this.currentItem = resp;
-          this.action = null;
-          this.titleAction = 'Consultation';
-          this.openSnackBar(this.initData('Le membre est ajouté avec succès', 'success'));
-          this.getAllmemberRecord();
-        }, error => {
-          this.openSnackBar(this.initData(error.error.message, 'error'));
-        });
-        break;
+        if (this.myForm.valid) {
+          this.memberRecordservice.addMemberRecord(this.memberRecordComponentModel).subscribe(resp => {
+            this.memberRecordComponentModel = resp;
+            this.currentItem = resp;
+            this.action = null;
+            this.titleAction = 'Consultation';
+            this.openSnackBar(this.initData('Le membre est ajouté avec succès', 'success'));
+            this.getAllmemberRecord();
+          }, error => {
+            this.openSnackBar(this.initData(error.error.message, 'error'));
+          });
+          break;
+        }
       }
       case 'update': {
-        this.memberRecordservice.updateMemberRecord(this.memberRecordComponentModel).subscribe(resp => {
-          this.memberRecordComponentModel = resp;
-          this.currentItem = resp;
-          this.action = null;
-          this.titleAction = 'Consultation';
-          this.openSnackBar(this.initData('Le membre est modifié avec succès', 'success'));
-          this.getAllmemberRecord();
-        }, error => {
-          this.openSnackBar(this.initData(error.error.message, 'error'));
-        });
-        break;
+        if (this.myForm.valid) {
+          this.memberRecordservice.updateMemberRecord(this.memberRecordComponentModel).subscribe(resp => {
+            this.memberRecordComponentModel = resp;
+            this.currentItem = resp;
+            this.action = null;
+            this.titleAction = 'Consultation';
+            this.openSnackBar(this.initData('Le membre est modifié avec succès', 'success'));
+            this.getAllmemberRecord();
+          }, error => {
+            this.openSnackBar(this.initData(error.error.message, 'error'));
+          });
+          break;
+        }
       }
       case '': {
         break;
@@ -161,7 +181,7 @@ export class MemberRecordComponent implements OnInit {
 
     // filter our data
     const temp = this.memberRecordTempList.filter(function (d) {
-      if(d && d.codeMemberRecord)
+      if (d && d.codeMemberRecord)
         return d.codeMemberRecord.toLowerCase().indexOf(val) !== -1 || !val;
     });
 

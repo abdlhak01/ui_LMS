@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import {BehaviorSubject} from "rxjs";
 
 const TOKEN_KEY = 'auth-token';
 const USER_KEY = 'auth-user';
@@ -8,7 +9,12 @@ const USER_KEY = 'auth-user';
 })
 export class TokenStorageService {
 
+  private dataSource = new BehaviorSubject<any>(false);
+  data = this.dataSource.asObservable();
+
   constructor() { }
+
+
 
   signOut() {
     window.sessionStorage.clear();
@@ -30,5 +36,9 @@ export class TokenStorageService {
 
   public getUser() {
     return JSON.parse(sessionStorage.getItem(USER_KEY));
+  }
+
+  updatedDataSelection(data: boolean){
+    this.dataSource.next(data);
   }
 }

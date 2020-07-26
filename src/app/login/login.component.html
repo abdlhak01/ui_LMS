@@ -15,11 +15,11 @@
           <div class="col-md-12">
             <div class="card card-container">
               <img
-                id="profile-img"
+                id="profile-img" style="width: 207px;margin: auto;"
                 src="//ssl.gstatic.com/accounts/ui/avatar_2x.png"
                 class="profile-img-card"
               />
-              <form
+              <form autocomplete="off"
                 *ngIf="!isLoggedIn"
                 name="form"
                 (ngSubmit)="f.form.valid && onSubmit()"
@@ -29,7 +29,7 @@
 
                   <mat-form-field class="full-width">
                     <mat-label>Nom d'utilisateur</mat-label>
-                    <input matInput placeholder="Address" name="address" [(ngModel)]="form.username"
+                    <input matInput placeholder="Nom d'utilisateur" name="utilisateur" [(ngModel)]="form.username"
                            required
                            minlength="3"
                            maxlength="20"
@@ -45,7 +45,7 @@
                 <div class="form-group">
                   <mat-form-field class="full-width">
                     <mat-label>Mot de pass</mat-label>
-                    <input matInput type="password" placeholder="Password" name="password" [(ngModel)]="form.password"
+                    <input matInput type="password" placeholder="Mot de pass" name="password" [(ngModel)]="form.password"
                            required
                            minlength="3"
                            maxlength="20"

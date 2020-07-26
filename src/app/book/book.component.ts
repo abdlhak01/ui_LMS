@@ -6,6 +6,7 @@ import {MatSnackBar} from '@angular/material/snack-bar';
 import {MatDialog} from '@angular/material/dialog';
 import {ConfirmationDialogComponent} from "../confirmation-dilog/confirmation-dialog.component";
 import {ColumnMode, DatatableComponent, SelectionType} from "@swimlane/ngx-datatable";
+import {FormControl, FormGroup, Validators} from "@angular/forms";
 
 
 @Component({
@@ -35,6 +36,7 @@ export class BookComponent implements OnInit {
   bookComponentModel: BookComponentModel = new BookComponentModel();
   private currentItem: BookComponentModel;
   action: string = null;
+  myForm: FormGroup;
   titleAction: string = 'Consultation';
   enableAtteindre = false;
   columns: any[] = [
@@ -57,6 +59,19 @@ export class BookComponent implements OnInit {
   ngOnInit() {
     this.getFirstBook();
     this.getAllbook();
+    this.myForm = new FormGroup({
+      codeBook: new FormControl(this.bookComponentModel.codeBook, [Validators.required]),
+      author: new FormControl(this.bookComponentModel.author, [Validators.required]),
+      title: new FormControl(this.bookComponentModel.title, [Validators.required]),
+      price: new FormControl(this.bookComponentModel.price, [Validators.required]),
+      rackNo: new FormControl(this.bookComponentModel.rackNo, [Validators.required]),
+      status: new FormControl(this.bookComponentModel.status, [Validators.required]),
+      edition: new FormControl(this.bookComponentModel.edition, [Validators.required]),
+      dateOfPurchase: new FormControl(this.bookComponentModel.dateOfPurchase, [Validators.required]),
+    });
+  }
+  public hasError = (controlName: string, errorName: string) => {
+    return this.myForm.controls[controlName].hasError(errorName);
   }
 
   getFirstBook() {
@@ -127,32 +142,35 @@ export class BookComponent implements OnInit {
   callAction() {
     switch (this.action) {
       case 'add': {
-        this.bookservice.addBook(this.bookComponentModel).subscribe(resp => {
-          this.bookComponentModel = resp;
-          this.currentItem = resp;
-          this.action = null;
-          this.titleAction = 'Consultation';
-          this.openSnackBar(this.initData('Le livre est ajouté avec succès', 'success'));
-          this.getAllbook();
-        }, error => {
-          this.openSnackBar(this.initData(error.error.message, 'error'));
-        });
-        break;
+        if (this.myForm.valid) {
+          this.bookservice.addBook(this.bookComponentModel).subscribe(resp => {
+            this.bookComponentModel = resp;
+            this.currentItem = resp;
+            this.action = null;
+            this.titleAction = 'Consultation';
+            this.openSnackBar(this.initData('Le livre est ajouté avec succès', 'success'));
+            this.getAllbook();
+          }, error => {
+            this.openSnackBar(this.initData(error.error.message, 'error'));
+          });
+          break;
+        }
       }
       case 'update': {
-        this.bookservice.updateBook(this.bookComponentModel).subscribe(resp => {
-          this.bookComponentModel = resp;
-          this.currentItem = resp;
-          this.action = null;
-          this.titleAction = 'Consultation';
-          this.openSnackBar(this.initData('Le livre est modifié avec succès', 'success'));
-          this.getAllbook();
-        }, error => {
-          this.openSnackBar(this.initData(error.error.message, 'error'));
-        });
-        break;
+        if (this.myForm.valid) {
+          this.bookservice.updateBook(this.bookComponentModel).subscribe(resp => {
+            this.bookComponentModel = resp;
+            this.currentItem = resp;
+            this.action = null;
+            this.titleAction = 'Consultation';
+            this.openSnackBar(this.initData('Le livre est modifié avec succès', 'success'));
+            this.getAllbook();
+          }, error => {
+            this.openSnackBar(this.initData(error.error.message, 'error'));
+          });
+          break;
+        }
       }
-
       case '': {
         break;
       }
